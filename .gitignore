@@ -1,0 +1,16 @@
+# Virtual Environments
+venv/
+env/
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Project Specific
+backend/uploads/
+uploads/
+
+# OS Specific
+.DS_Store
+Thumbs.db
