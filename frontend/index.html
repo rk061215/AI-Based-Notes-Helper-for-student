@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Notes Generator</title>
+    <meta name="description" content="Transform any text, PDF, or image into structured exam-ready notes with AI. Save and manage your personal notes library.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ── APP HEADER ── -->
+        <header>
+            <h1>AI Notes Generator</h1>
+            <p>Turn text, PDFs & images into structured study notes instantly.</p>
+
+            <!-- Tab Navigation -->
+            <nav class="tab-nav">
+                <button class="tab-btn active" id="tabGenerateBtn" onclick="switchTab('generate')">✨ Generate</button>
+                <button class="tab-btn" id="tabLibraryBtn" onclick="switchTab('library')">📚 My Notes</button>
+            </nav>
+        </header>
+
+        <main>
+
+            <!-- ══════════════════════════════════ -->
+            <!--   TAB 1: GENERATE NOTES            -->
+            <!-- ══════════════════════════════════ -->
+            <div id="tabGenerate">
+
+                <div class="card input-section">
+                    <!-- Mode selector -->
+                    <div class="controls">
+                        <label for="modeSelect">Select Mode:</label>
+                        <select id="modeSelect" class="drop-down">
+                            <option value="exam">📖 Exam Notes Mode</option>
+                            <option value="daily">📅 Daily Study Analyzer</option>
+                        </select>
+                    </div>
+
+                    <!-- Text input -->
+                    <textarea id="inputText" placeholder="Option 1: Paste your text here (e.g., lecture transcripts, articles, book excerpts)..."></textarea>
+
+                    <!-- File upload -->
+                    <div class="upload-section">
+                        <div class="upload-divider"><span>OR</span></div>
+                        <div class="upload-row">
+                            <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg" class="hidden">
+                            <label for="fileInput" class="upload-btn">
+                                <span>📂</span>
+                                <span id="fileLabel">Choose PDF or Image</span>
+                            </label>
+                            <button id="clearFileBtn" class="clear-btn hidden" title="Remove file">✕</button>
+                        </div>
+                        <p class="upload-hint">Accepted: .pdf, .png, .jpg, .jpeg</p>
+                    </div>
+
+                    <!-- Generate button -->
+                    <div class="action-bar">
+                        <button id="generateBtn" class="primary-btn">
+                            <span class="btn-text">Generate Notes</span>
+                            <div class="loader hidden"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error display -->
+                <div class="error-section hidden" id="errorContainer">
+                    <p id="errorText"></p>
+                </div>
+
+                <!-- Success toast -->
+                <div class="toast hidden" id="successToast">✅ Note saved successfully!</div>
+
+                <!-- Output + Save -->
+                <div class="card output-section hidden" id="outputContainer">
+                    <div class="output-header">
+                        <h2>Generated Notes</h2>
+                        <button class="save-btn" id="saveBtn">
+                            <span class="save-btn-text">💾 Save Note</span>
+                            <div class="loader hidden" id="saveLoader"></div>
+                        </button>
+                    </div>
+                    <div id="outputText" class="markdown-body"></div>
+                </div>
+
+            </div>
+
+            <!-- ══════════════════════════════════ -->
+            <!--   TAB 2: MY NOTES LIBRARY          -->
+            <!-- ══════════════════════════════════ -->
+            <div id="tabLibrary" class="hidden">
+
+                <!-- Search bar -->
+                <div class="card search-section">
+                    <div class="search-row">
+                        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search your notes...">
+                        <button class="search-clear hidden" id="searchClearBtn" onclick="clearSearch()">✕</button>
+                    </div>
+                </div>
+
+                <!-- Notes list -->
+                <div id="notesListContainer">
+                    <div class="notes-loading" id="notesLoading">
+                        <div class="loader"></div>
+                        <span>Loading notes...</span>
+                    </div>
+                    <div id="notesList"></div>
+                    <div class="empty-state hidden" id="emptyState">
+                        <p>📭</p>
+                        <p>No notes saved yet.</p>
+                        <p>Generate & save some notes first!</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ══════════════════════════════════ -->
+            <!--   NOTE DETAIL MODAL                -->
+            <!-- ══════════════════════════════════ -->
+            <div class="modal-overlay hidden" id="noteModal">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 id="modalTitle">Note Title</h2>
+                        <button class="modal-close" onclick="closeModal()">✕</button>
+                    </div>
+                    <div class="modal-meta" id="modalMeta"></div>
+                    <div class="markdown-body" id="modalBody"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
