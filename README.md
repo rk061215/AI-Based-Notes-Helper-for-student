@@ -1,1 +1,0 @@
-# AI-Based-Notes-Helper-for-student
