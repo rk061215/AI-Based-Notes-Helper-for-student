@@ -56,12 +56,12 @@ app.add_middleware(
 )
 
 # ── Uploads folder: create if missing ──
-UPLOADS_DIR = pathlib.Path(__file__).parent / "uploads"
-UPLOADS_DIR.mkdir(exist_ok=True)
+UPLOAD_FOLDER = "/tmp/uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ── Serve uploaded files as static ──
-# Access via: http://127.0.0.1:8000/uploads/<filename>
-app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
+# Access via: https://your-backend-url/uploads/<filename>
+app.mount("/uploads", StaticFiles(directory=UPLOAD_FOLDER), name="uploads")
 
 # ── Configure Gemini ──
 API_KEY = os.getenv("GEMINI_API_KEY")
@@ -208,12 +208,15 @@ async def summarize(
         file_bytes = await file.read()
         filename_lower = file.filename.lower()
 
-        # Save file to uploads/ with a unique name to avoid collisions
+        # Save file to /tmp/uploads with a unique name to avoid collisions
         ext = pathlib.Path(file.filename).suffix.lower()
         unique_name = f"{uuid.uuid4().hex}{ext}"
-        save_path = UPLOADS_DIR / unique_name
-        save_path.write_bytes(file_bytes)
-        saved_file_url = f"http://127.0.0.1:8000/uploads/{unique_name}"
+        save_path = os.path.join(UPLOAD_FOLDER, unique_name)
+        with open(save_path, "wb") as f:
+            f.write(file_bytes)
+        
+        # Use relative URL so it works seamlessly on both localhost and Render
+        saved_file_url = f"/uploads/{unique_name}"
 
         if filename_lower.endswith(".pdf"):
             extracted_text = extract_text_from_pdf(file_bytes)
