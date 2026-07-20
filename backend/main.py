@@ -164,7 +164,7 @@ Your output MUST:
 def generate_notes(prompt: str) -> str:
     """Send prompt to Gemini and return the generated text."""
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        model = genai.GenerativeModel('gemini-3.5-flash')
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
@@ -174,7 +174,7 @@ def generate_notes(prompt: str) -> str:
 def generate_title(output_text: str) -> str:
     """Ask Gemini to produce a short 5-word title from the notes output."""
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        model = genai.GenerativeModel('gemini-3.5-flash')
         prompt = f"Generate a very short title (5 words max) for these notes. Return only the title, no quotes:\n\n{output_text[:500]}"
         return model.generate_content(prompt).text.strip()
     except Exception:
