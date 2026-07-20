@@ -18,7 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput     = document.getElementById('searchInput');
     const searchClearBtn  = document.getElementById('searchClearBtn');
 
-    const API = 'http://127.0.0.1:8000';
+    // ── API URL Configuration ──
+    // - If hosted together (e.g. on Render), it uses the same origin.
+    // - If running frontend locally (e.g., via http-server on port 3000), it redirects to FastAPI on port 8000.
+    // - If deploying frontend on Vercel separately, change this URL to your deployed Render backend URL.
+    const API = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
+        ? (window.location.port === '3000' ? 'http://127.0.0.1:8000' : window.location.origin)
+        : window.location.origin; // Replace with your Render backend URL if deploying frontend to Vercel separately
 
     // State: track last generated data for the Save button
     let lastInput   = '';
